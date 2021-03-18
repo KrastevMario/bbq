@@ -35,10 +35,18 @@ public class Master extends Thread{
                 System.out.println("ERROR in " + this.name + " | " + e.getMessage());
             }
             System.out.println("the product: " + generatedProduct.getType() + " has been created " + "by " + this.name);
+            synchronized (this.bbq) {
+                this.insertProductInBbq(generatedProduct);
+                this.bbq.notifyAll();
+            }
         }
     }
 
     protected Product generateRandomProduct() {
         return this.allowedProducts.get(util.Randomizator.getRandomNumber(0, this.allowedProducts.size() - 1));
+    }
+
+    protected void insertProductInBbq(Product product){
+        //every class will be able to insert its own items
     }
 }

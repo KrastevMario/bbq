@@ -3,19 +3,27 @@ package bbqRemake;
 import bbqRemake.bbqs.Bbq;
 import bbqRemake.customers.Customer;
 import bbqRemake.masters.breadBakers.MasterBaker;
+import bbqRemake.sellers.Seller;
 
 public class Demo {
-    Customer gosho = new Customer("Gosho");
-    Customer pesho = new Customer("Pesho");
+    public static void main(String[] args) {
+        Customer gosho = new Customer("Gosho");
+        Customer pesho = new Customer("Pesho");
 
-    Bbq bbq = new Bbq("Skarata na selo");
+        Bbq bbq = new Bbq("Skarata na selo");
 
-    MasterBaker pena = new MasterBaker("Pena", bbq);
+        MasterBaker pena = new MasterBaker("Pena", bbq);
 
-    Seller kiro = new Seller("Kiro", bbq);
+        Seller kiro = new Seller("Kiro", bbq);
 
-    bbq.addCustomer(gosho);
-    bbq.addCustomer(pesho);
+        bbq.addCustomer(gosho);
+        bbq.addCustomer(pesho);
+
+        pena.start();
+        kiro.start();
+        bbq.setDaemon(true);
+        bbq.start();
+    }
 }
 
 /*

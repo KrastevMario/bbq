@@ -20,4 +20,13 @@ public class MasterBaker extends Master {
         this.allowedProducts.add(new GrainBread());
         this.allowedProducts.add(new WhiteBread());
     }
+
+    @Override
+    protected void insertProductInBbq(Product product) {
+        switch(product.getType()){
+            case GRAINBREAD -> this.bbq.addGrainBread();
+            case WHITEBREAD -> this.bbq.addWhiteBread();
+            default -> System.out.println("Couldn't insert successfully the product(" + this.name + ")");
+        }
+    }
 }
