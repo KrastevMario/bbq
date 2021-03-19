@@ -2,24 +2,29 @@ package bbqRemake;
 
 import bbqRemake.bbqs.Bbq;
 import bbqRemake.customers.Customer;
+import bbqRemake.masters.Master;
 import bbqRemake.masters.breadBakers.MasterBaker;
 import bbqRemake.sellers.Seller;
 
 public class Demo {
     public static void main(String[] args) {
-        Customer gosho = new Customer("Gosho");
-        Customer pesho = new Customer("Pesho");
+//        Customer gosho = new Customer("Gosho");
+//        Customer pesho = new Customer("Pesho");
 
         Bbq bbq = new Bbq("Skarata na selo");
 
-        MasterBaker pena = new MasterBaker("Pena", bbq);
+        CustomerProducer customerProducer = new CustomerProducer(bbq);
+
+        Master pena = new MasterBaker("Pena", bbq);
 
         Seller kiro = new Seller("Kiro", bbq);
         bbq.addSeller(kiro);
+        bbq.addMaster(pena);
 
-        bbq.addCustomer(gosho);
-        bbq.addCustomer(pesho);
+//        bbq.addCustomer(gosho);
+//        bbq.addCustomer(pesho);
 
+        customerProducer.start();
         pena.start();
         kiro.start();
         bbq.setDaemon(true);

@@ -1,15 +1,13 @@
 package bbqRemake.bbqs;
 
 import bbqRemake.customers.Customer;
+import bbqRemake.masters.Master;
 import bbqRemake.products.Product;
 import bbqRemake.products.bread.GrainBread;
 import bbqRemake.products.bread.WhiteBread;
 import bbqRemake.sellers.Seller;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Bbq extends Thread{
@@ -17,8 +15,14 @@ public class Bbq extends Thread{
     private String name;
     private Seller seller;
     private Queue<Customer> customers;
+    private List<Master> masters;
     private Map<Product, Integer> whiteBreadStorage;
     private Map<Product, Integer> grainBreadStorage;
+
+    private Master mast;
+
+    private final int maxWhiteBread = 2;
+    private final int maxGrainBread = 3;
 
     public Bbq(String name){
         //TODO: verify
@@ -26,11 +30,24 @@ public class Bbq extends Thread{
         this.customers = new LinkedList<>();
         this.whiteBreadStorage = new ConcurrentHashMap<>();
         this.grainBreadStorage = new ConcurrentHashMap<>();
+        this.masters = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer){
         //TODO: verify
+
+        System.out.println("A NEW CUSTOMER HAS ARRIVED: " + customer.getName());
         this.customers.offer(customer);
+    }
+
+    public void addSeller(Seller seller) {
+        if(seller != null) {
+            this.seller = seller;
+        }
+    }
+
+    public void addMaster(Master master){
+        this.masters.add(master);
     }
 
     public boolean hasNextCustomer(){
@@ -43,7 +60,8 @@ public class Bbq extends Thread{
 
     public void addWhiteBread(){
         synchronized (this.whiteBreadStorage) {
-            if (this.whiteBreadStorage.get(new WhiteBread()) != null && this.whiteBreadStorage.get(new WhiteBread()) == 5) {
+            if (this.whiteBreadStorage.get(new WhiteBread()) != null &&
+                    this.whiteBreadStorage.get(new WhiteBread()) == this.maxWhiteBread) {
                 //no more space for more breads.
                 return;
             }
@@ -61,7 +79,8 @@ public class Bbq extends Thread{
 
     public void addGrainBread() {
         synchronized (grainBreadStorage) {
-            if (this.grainBreadStorage.get(new GrainBread()) != null && this.grainBreadStorage.get(new GrainBread()) == 3) {
+            if (this.grainBreadStorage.get(new GrainBread()) != null &&
+                    this.grainBreadStorage.get(new GrainBread()) == this.maxGrainBread) {
                 //out of space;
                 return;
             }
@@ -109,9 +128,32 @@ public class Bbq extends Thread{
         return false;
     }
 
-    public void addSeller(Seller seller) {
-        if(seller != null) {
-            this.seller = seller;
+    public boolean isMaxReached(Product product){
+        switch (product.getType()){
+            case GRAINBREAD:
+                return isMaxGrainBread();
+            case WHITEBREAD:
+                return isMaxWhiteBread();
+            default:
+                //default
+                break;
+        }
+        return true;
+    }
+
+    private boolean isMaxWhiteBread() {
+    return this.whiteBreadStorage.get(new WhiteBread()) != null && this.whiteBreadStorage.get(new WhiteBread()) == this.maxWhiteBread;
+    }
+
+    private boolean isMaxGrainBread() {
+        return this.grainBreadStorage.get(new GrainBread()) != null && this.grainBreadStorage.get(new GrainBread()) == this.maxGrainBread;
+    }
+
+    public void clientServedSuccessfully() {
+        for (Master m : this.masters){
+            synchronized (m){
+                m.notifyAll();
+            }
         }
     }
 }

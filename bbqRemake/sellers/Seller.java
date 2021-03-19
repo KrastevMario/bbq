@@ -66,7 +66,6 @@ public class Seller extends Thread{
                         }
                         try {
                             wait();
-                            System.out.println("AWAKE");
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -92,5 +91,6 @@ public class Seller extends Thread{
             }
         }
         System.out.println("Customer " + customer.getName() + " served SUCCESSFULLY");
+        this.bbq.clientServedSuccessfully();
     }
 }
