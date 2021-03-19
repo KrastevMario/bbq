@@ -4,6 +4,8 @@ import bbqRemake.bbqs.Bbq;
 import bbqRemake.customers.Customer;
 import bbqRemake.masters.Master;
 import bbqRemake.masters.breadBakers.MasterBaker;
+import bbqRemake.masters.meatCooker.MasterMeatCooker;
+import bbqRemake.masters.saladProducer.MasterSalad;
 import bbqRemake.sellers.Seller;
 
 public class Demo {
@@ -15,17 +17,24 @@ public class Demo {
 
         CustomerProducer customerProducer = new CustomerProducer(bbq);
 
-        Master pena = new MasterBaker("Pena", bbq);
+        Master penaBaker = new MasterBaker("Pena", bbq);
+        Master peshoMeatCooker = new MasterMeatCooker("Pesho", bbq);
+        Master sashaSaladCreator = new MasterSalad("Sasha", bbq);
 
         Seller kiro = new Seller("Kiro", bbq);
         bbq.addSeller(kiro);
-        bbq.addMaster(pena);
+
+        bbq.addMaster(penaBaker);
+        bbq.addMaster(peshoMeatCooker);
+        bbq.addMaster(sashaSaladCreator);
 
 //        bbq.addCustomer(gosho);
 //        bbq.addCustomer(pesho);
 
         customerProducer.start();
-        pena.start();
+        penaBaker.start();
+        peshoMeatCooker.start();
+        sashaSaladCreator.start();
         kiro.start();
         bbq.setDaemon(true);
         bbq.start();

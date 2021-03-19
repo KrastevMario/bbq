@@ -80,7 +80,76 @@ public class Seller extends Thread{
                         }
                         try {
                             wait();
-                            System.out.println("AWAKE");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case MEATBALL:
+                    while(true){
+                        if(this.bbq.getMeatBall()){
+                            //TODO: add the price of the item to the order
+                            System.out.println("TOOK MEAT BALL");
+                            break;
+                        }
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case STEAK:
+                    while(true){
+                        if(this.bbq.getSteak()){
+                            //TODO: add the price of the item to the order
+                            System.out.println("TOOK STEAK");
+                            break;
+                        }
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case PLESKAVICA:
+                    while(true){
+                        if(this.bbq.getPleskavica()){
+                            //TODO: add the price of the item to the order
+                            System.out.println("TOOK PLESKAVICA");
+                            break;
+                        }
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case CABBAGECARROTSSALAD:
+                    while(true){
+                        if(this.bbq.getCabbageCarrotSalad()){
+                            //TODO: add the price of the item to the order
+                            System.out.println("TOOK Cabbage and carrots Salad");
+                            break;
+                        }
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case TOMATOESCUCUMBERSALAD:
+                    while(true){
+                        if(this.bbq.getTomatoesCucumberSalad()){
+                            //TODO: add the price of the item to the order
+                            System.out.println("TOOK tomatoes and cucumbers Salad");
+                            break;
+                        }
+                        try {
+                            wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

@@ -8,7 +8,7 @@ import bbqRemake.products.bread.WhiteBread;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Master extends Thread{
+public abstract class Master extends Thread{
     protected String name;
     protected List<Product> allowedProducts;
     protected Bbq bbq;
@@ -70,7 +70,7 @@ public class Master extends Thread{
         return this.allowedProducts.get(util.Randomizator.getRandomNumber(0, this.allowedProducts.size() - 1));
     }
 
-    protected void insertProductInBbq(Product product){
+    protected synchronized void insertProductInBbq(Product product){
         //every class will be able to insert its own items
     }
 
