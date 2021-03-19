@@ -39,13 +39,14 @@ public class Bbq extends Thread{
     private static final int MAX_TOMATOES_CUCUMBER_SALAD = 5000;
 
     //MIN THAT CAN BE SERVED TO A CUSTOMER
+    //********************* CUSTOMER'S PORTION *******************
     private static final int MIN_WHITE_BREAD = 1;
     private static final int MIN_GRAIN_BREAD = 1;
     private static final int MIN_STEAK = 1;
     private static final int MIN_PLESKAVICA = 1;
     private static final int MIN_MEAT_BALL = 1;
-    private static final int MIN_CABBAGE_CARROTS_SALAD = 500; //0.5kg (500 gr)
-    private static final int MIN_TOMATOES_CUCUMBER_SALAD = 500;
+    private static final int MIN_CABBAGE_CARROTS_SALAD = 200; //0.2kg (200 gr)
+    private static final int MIN_TOMATOES_CUCUMBER_SALAD = 200;
 
     public Bbq(String name){
         //TODO: verify
@@ -77,7 +78,7 @@ public class Bbq extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for (Product w : this.whiteBreadStorage.keySet()) {
+            for (Product w : this.whiteBreadStorage.keySet()) { //there's only 1 element in the collection but maybe for for future changes
                 System.out.println("Product: " + w.getType() + " | " + this.whiteBreadStorage.get(w));
             }
             for (Product w : this.grainBreadStorage.keySet()) {
@@ -133,13 +134,17 @@ public class Bbq extends Thread{
     }
 
     // ************************* SERVED CUSTOMER ***************************
-    public void clientServedSuccessfully() {
+    public void clientServedSuccessfully(Customer customer) {
         for (Master m : this.masters){
             synchronized (m){
                 m.notifyAll();
             }
         }
+        //save to file the order of the customer
+        this.saveToFile(customer);
     }
+
+    //*********************** SAVE FIlE ************************
 
     //************************* GET PRODUCT ***********************
 

@@ -1,7 +1,7 @@
 package bbqRemake;
 
 import bbqRemake.bbqs.Bbq;
-import bbqRemake.customers.Customer;
+import bbqRemake.customers.CustomerProducer;
 import bbqRemake.masters.Master;
 import bbqRemake.masters.breadBakers.MasterBaker;
 import bbqRemake.masters.meatCooker.MasterMeatCooker;

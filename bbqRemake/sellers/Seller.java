@@ -52,6 +52,10 @@ public class Seller extends Thread{
         // * * serve the customer * *
         //take his order
         List<Product> orderFromCustomer = this.customer.getProductsList();
+        System.out.println(this.customer.getName() + "'s ORDER: ");
+        for (Product p : orderFromCustomer){
+            System.out.println("----- " + p.getType());
+        }
         //check each part of his order (in the list) until the list is empty.
         for (Product p : orderFromCustomer){
             //  if there's a part missing, make the seller wait until a master notifies that has cooked food.
@@ -160,6 +164,6 @@ public class Seller extends Thread{
             }
         }
         System.out.println("Customer " + customer.getName() + " served SUCCESSFULLY");
-        this.bbq.clientServedSuccessfully();
+        this.bbq.clientServedSuccessfully(this.customer);
     }
 }

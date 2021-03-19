@@ -1,4 +1,4 @@
-package bbqRemake;
+package bbqRemake.customers;
 
 import bbqRemake.bbqs.Bbq;
 import bbqRemake.customers.Customer;
