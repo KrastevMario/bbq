@@ -4,6 +4,7 @@ import bbqRemake.customers.Customer;
 import bbqRemake.products.Product;
 import bbqRemake.products.bread.GrainBread;
 import bbqRemake.products.bread.WhiteBread;
+import bbqRemake.sellers.Seller;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Bbq extends Thread{
 
     private String name;
+    private Seller seller;
     private Queue<Customer> customers;
     private Map<Product, Integer> whiteBreadStorage;
     private Map<Product, Integer> grainBreadStorage;
@@ -51,6 +53,10 @@ public class Bbq extends Thread{
         }else {
             this.whiteBreadStorage.put(new WhiteBread(), 1);
         }
+
+        synchronized (this.seller) {
+            this.seller.notifyAll();
+        }
     }
 
     public void addGrainBread() {
@@ -64,6 +70,9 @@ public class Bbq extends Thread{
             this.grainBreadStorage.put(new GrainBread(), this.grainBreadStorage.get(new GrainBread()) + 1);
         }else {
             this.grainBreadStorage.put(new GrainBread(), 1);
+        }
+        synchronized (this.seller) {
+            this.seller.notifyAll();
         }
     }
 
@@ -81,6 +90,28 @@ public class Bbq extends Thread{
             for (Product w : this.grainBreadStorage.keySet()) {
                 System.out.println("Product: " + w.getType() + " | " + this.grainBreadStorage.get(w));
             }
+        }
+    }
+
+    public boolean getWhiteBread() {
+        if(this.whiteBreadStorage.get(new WhiteBread()) != null && this.whiteBreadStorage.get(new WhiteBread()) > 0){
+            this.whiteBreadStorage.put(new WhiteBread(), this.whiteBreadStorage.get(new WhiteBread()) - 1);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean getGrainBread() {
+        if(this.grainBreadStorage.get(new GrainBread()) != null && this.grainBreadStorage.get(new GrainBread()) > 0){
+            this.grainBreadStorage.put(new GrainBread(), this.grainBreadStorage.get(new GrainBread()) - 1);
+            return true;
+        }
+        return false;
+    }
+
+    public void addSeller(Seller seller) {
+        if(seller != null) {
+            this.seller = seller;
         }
     }
 }

@@ -15,6 +15,7 @@ public class Demo {
         MasterBaker pena = new MasterBaker("Pena", bbq);
 
         Seller kiro = new Seller("Kiro", bbq);
+        bbq.addSeller(kiro);
 
         bbq.addCustomer(gosho);
         bbq.addCustomer(pesho);

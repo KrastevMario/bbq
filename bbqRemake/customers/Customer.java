@@ -27,4 +27,8 @@ public class Customer{
         this.productsList.add(new WhiteBread());
         this.productsList.add(new GrainBread());
     }
+
+    public String getName() {
+        return this.name;
+    }
 }

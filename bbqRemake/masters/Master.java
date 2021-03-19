@@ -28,7 +28,7 @@ public class Master extends Thread{
     public void run() {
         while(true){
             Product generatedProduct = this.generateRandomProduct();
-            System.out.println("Product " + generatedProduct.getType() + " started creating");
+            //System.out.println("Product " + generatedProduct.getType() + " started creating");
             try {
                 Thread.sleep(generatedProduct.getProducingTime() * 1000);
             } catch (InterruptedException e) {
