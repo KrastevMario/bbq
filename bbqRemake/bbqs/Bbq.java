@@ -2,6 +2,7 @@ package bbqRemake.bbqs;
 
 import bbqRemake.customers.Customer;
 import bbqRemake.masters.Master;
+import bbqRemake.notebooks.Bill;
 import bbqRemake.products.Product;
 import bbqRemake.products.bread.GrainBread;
 import bbqRemake.products.bread.WhiteBread;
@@ -12,6 +13,8 @@ import bbqRemake.products.salads.CabbageCarrotsSalad;
 import bbqRemake.products.salads.TomatoesCucumberSalad;
 import bbqRemake.sellers.Seller;
 
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,6 +31,7 @@ public class Bbq extends Thread{
     private final Map<Product, Integer> pleskavicaStorage;
     private final Map<Product, Integer> cabbageCarrotsSaladStorage;
     private final Map<Product, Integer> tomatoesCucumberSaladStorage;
+    private List<Bill> bills;
 
     //MAX THAT CAN BE SAVED (IN STORAGE)
     private static final int MAX_WHITE_BREAD = 2;
@@ -52,6 +56,9 @@ public class Bbq extends Thread{
         //TODO: verify
         this.name = name;
         this.customers = new LinkedList<>();
+        this.masters = new ArrayList<>();
+        this.bills = new ArrayList<>();
+
         this.whiteBreadStorage = new ConcurrentHashMap<>();
         this.grainBreadStorage = new ConcurrentHashMap<>();
         this.meatBallStorage = new ConcurrentHashMap<>();
@@ -59,7 +66,6 @@ public class Bbq extends Thread{
         this.pleskavicaStorage = new ConcurrentHashMap<>();
         this.cabbageCarrotsSaladStorage = new ConcurrentHashMap<>();
         this.tomatoesCucumberSaladStorage = new ConcurrentHashMap<>();
-        this.masters = new ArrayList<>();
 
         this.whiteBreadStorage.put(new WhiteBread(), 0);
         this.grainBreadStorage.put(new GrainBread(), 0);
@@ -141,10 +147,53 @@ public class Bbq extends Thread{
             }
         }
         //save to file the order of the customer
-        this.saveToFile(customer);
+        Bill currentBill = new Bill(customer.getProductsList(), customer, LocalDateTime.now());
+        synchronized (this.bills){
+            this.bills.add(currentBill);
+        }
+        this.saveToFile(currentBill);
     }
 
     //*********************** SAVE FIlE ************************
+    private void saveToFile(Bill bill){
+        //**** Save every bill in a new file ****
+//        try(PrintWriter pr = new PrintWriter("billNumber-" + bill.getId() + ".txt");) {
+//            int counterProducts = 0
+//            pr.print("<");
+//            for (Product p : bill.getProductsOrdered()){
+//                counterProducts++;
+//                pr.print(p.getType());
+//                if(counterProducts != bill.getProductsOrdered().size()) {
+//                    pr.print(", ");
+//                }else{
+//                    pr.print(" - ");
+//                }
+//            }
+//            pr.print(bill.getTotalSum() + " лева, " + bill.getDateOrdered() + ">");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+        //**** add bill to the file ****
+        try(BufferedWriter output = new BufferedWriter(new FileWriter("billsNotebook.txt", true))){
+            int counterProducts = 0;
+            output.write("<");
+            for (Product p : bill.getProductsOrdered()){
+                counterProducts++;
+                output.write("" + p.getType());
+                if(counterProducts != bill.getProductsOrdered().size()) {
+                    output.write(", ");
+                }else{
+                    output.write(" - ");
+                }
+            }
+            output.write(bill.getTotalSum() + " лева, " + bill.getDateOrdered() + ">");
+            output.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     //************************* GET PRODUCT ***********************
 
